@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 import static java.util.Comparator.comparing;
 
@@ -107,35 +108,28 @@ public class Start {
         System.out.println("=====================================Parte 9=============================================");
         System.out.println("Construindo Informações Assinatura");
         ArrayList<Assinatura> assinatura = new ArrayList<>();
-        assinatura.add(new Assinatura(new BigDecimal("99.98"), LocalDateTime.of(2023, Month.MARCH, 1, 11, 30), null));
+        assinatura.add(new Assinatura(new BigDecimal("99.98"), LocalDateTime.of(2023, Month.MARCH, 1, 11, 30)));
         assinatura.add(new Assinatura(new BigDecimal("99.98"), LocalDateTime.of(2023, Month.APRIL, 1, 11, 30), LocalDateTime.of(2023, Month.MAY, 1, 11, 30)));
         assinatura.add(new Assinatura(new BigDecimal("99.98"), LocalDateTime.of(2023, Month.APRIL, 1, 11, 30), LocalDateTime.of(2023, Month.JUNE, 1, 11, 30)));
 
         System.out.println("=====================================Parte 10=============================================");
-        assinatura.forEach(assinaturaAtiva ->{
-            if (assinaturaAtiva.getBegin() != null && assinaturaAtiva.getEnd() == null){
+        assinatura.forEach(assinaturaAtiva -> {
+            if (assinaturaAtiva.getBegin() != null && !assinaturaAtiva.getEnd().isPresent()){
                 long mesesAtivo = ChronoUnit.MONTHS.between(LocalDate.now(), assinaturaAtiva.getBegin());
-                System.out.println("Meses da Assinatura Ativa: " + (-mesesAtivo));
+                System.out.println("Assinatura " + (assinatura.indexOf(assinaturaAtiva) + 1) + " Ativa: " + (-mesesAtivo) + " meses");
             }
         });
 
         System.out.println("=====================================Parte 11=============================================");
-        AtomicInteger index = new AtomicInteger();
-        assinatura.forEach(assinaturaAtiva ->{
-            index.getAndIncrement();
-
-            long mesesAtivo = ChronoUnit.MONTHS.between(assinaturaAtiva.getEnd() != null ? assinaturaAtiva.getEnd() : LocalDateTime.now(), assinaturaAtiva.getBegin());
-            System.out.println("Meses da Assinatura " + index +" iniciou até a data de temíno ou Atual: " + (-mesesAtivo));
+        assinatura.forEach(assinaturaAtiva -> {
+            long mesesAtivo = ChronoUnit.MONTHS.between(assinaturaAtiva.getEnd().orElse(LocalDateTime.now()), assinaturaAtiva.getBegin());
+            System.out.println("Meses da Assinatura " + (assinatura.indexOf(assinaturaAtiva) + 1) + " iniciou até a data de temíno ou Atual: " + (-mesesAtivo));
         });
 
         System.out.println("=====================================Parte 12=============================================");
-        AtomicInteger index2 = new AtomicInteger();
-        assinatura.forEach(assinaturaAtiva ->{
-            index2.getAndIncrement();
-
-            long mesesAtivo = ChronoUnit.MONTHS.between(assinaturaAtiva.getEnd() != null ? assinaturaAtiva.getEnd() : LocalDateTime.now(), assinaturaAtiva.getBegin());
-
-            System.out.println("Meses da Assinatura " + index2 + " Pago: R$ " + (new BigDecimal(-mesesAtivo).multiply(assinaturaAtiva.getMensalidade())));
+        assinatura.forEach(assinaturaAtiva -> {
+            long mesesAtivo = ChronoUnit.MONTHS.between(assinaturaAtiva.getEnd().orElse(LocalDateTime.now()), assinaturaAtiva.getBegin());
+            System.out.println("Meses da Assinatura " + (assinatura.indexOf(assinaturaAtiva) + 1) + " Pago: R$ " + (new BigDecimal(-mesesAtivo).multiply(assinaturaAtiva.getMensalidade())));
         });
 
 

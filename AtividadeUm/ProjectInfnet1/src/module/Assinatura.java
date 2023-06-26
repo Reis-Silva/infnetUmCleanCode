@@ -2,6 +2,7 @@ package module;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class Assinatura {
 
@@ -9,12 +10,18 @@ public class Assinatura {
 
     private LocalDateTime begin;
 
-    private LocalDateTime end;
+    private Optional<LocalDateTime>  end;
+
+    public Assinatura(BigDecimal mensalidade, LocalDateTime begin) {
+        this.mensalidade = mensalidade;
+        this.begin = begin;
+        this.end = Optional.empty();
+    }
 
     public Assinatura(BigDecimal mensalidade, LocalDateTime begin, LocalDateTime end) {
         this.mensalidade = mensalidade;
         this.begin = begin;
-        this.end = end;
+        this.end = Optional.of(end);
     }
 
     public BigDecimal getMensalidade() {
@@ -33,11 +40,11 @@ public class Assinatura {
         this.begin = begin;
     }
 
-    public LocalDateTime getEnd() {
+    public Optional<LocalDateTime>  getEnd() {
         return end;
     }
 
-    public void setEnd(LocalDateTime end) {
+    public void setEnd(Optional<LocalDateTime>  end) {
         this.end = end;
     }
 }
