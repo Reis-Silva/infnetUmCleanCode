@@ -2,7 +2,6 @@ package module;
 
 import enumeration.AssinaturaEnum;
 import enumeration.StatusAssinaturaEnum;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -11,7 +10,6 @@ import java.util.Optional;
 
 public class Assinatura {
 
-    private Long parcela;
     private LocalDateTime begin;
 
     private Optional<LocalDateTime>  end;
@@ -20,15 +18,17 @@ public class Assinatura {
 
     private Boolean ativa;
 
+    private Long parcela;
+
     public Assinatura(){
     }
 
     public Assinatura(LocalDateTime begin, AssinaturaEnum tipoAssinatura, Boolean ativa) {
-        this.parcela = getTempoAssinaturaExecutada();
         this.begin = begin;
         this.end =  Optional.empty();
         this.tipoAssinatura = tipoAssinatura;
         this.ativa = ativa;
+        this.parcela = getTempoAssinaturaExecutada();
     }
 
     public LocalDateTime getBegin() {
@@ -59,23 +59,41 @@ public class Assinatura {
         this.ativa = ativa;
     }
 
+    public Long getParcela() {
+        return parcela;
+    }
+
+    public void setParcela(Long parcela) {
+        this.parcela = parcela;
+    }
+
     public Long getTempoAssinaturaExecutada(){
-        return ChronoUnit.MONTHS.between(LocalDateTime.now(), begin) % tipoAssinatura.getValorCongruenteTempoAssinatura();
+        return -ChronoUnit.MONTHS.between(LocalDateTime.now(), begin) / tipoAssinatura.getValorCongruenteTempoAssinatura();
     }
 
-    private BigDecimal getValorTotalMensalidade(){
-        return tipoAssinatura.getValorDebitoAssinatura().add(
-                tipoAssinatura.getTaxaAssinatura()
-                        .multiply(tipoAssinatura.getValorDebitoAssinatura())
-                        .multiply(BigDecimal.valueOf(getTempoAssinaturaExecutada())));
+    public BigDecimal getValorTotalMensalidade(){
+        return tipoAssinatura.getValorDebitoAssinatura()
+                    .multiply(BigDecimal.valueOf(getTempoAssinaturaExecutada())).add(
+                        tipoAssinatura.getTaxaAssinatura()
+                            .multiply(tipoAssinatura.getValorDebitoAssinatura())
+                            .multiply(BigDecimal.valueOf(getTempoAssinaturaExecutada())));
     }
 
-    private BigDecimal getValorTotalDebitado(List<Assinatura> pagamentoAssinatura){
-        return tipoAssinatura.getValorDebitoAssinatura().multiply(BigDecimal.valueOf(pagamentoAssinatura.stream().filter(assinaturaPaga -> assinaturaPaga.getAtiva()).count()));
+    public BigDecimal getValorTotalDebitado(List<Assinatura> pagamentoAssinatura){
+        return new BigDecimal(pagamentoAssinatura.stream().filter(assinaturaPaga -> assinaturaPaga.getAtiva()).map(assinatura -> assinatura.getTipoAssinatura().getValorDebitoAssinatura()).count()).add(
+                        BigDecimal.valueOf(pagamentoAssinatura.stream().filter(assinaturaPaga -> assinaturaPaga.getAtiva()).count())
+                            .multiply(tipoAssinatura.getTaxaAssinatura()))
+                            .multiply(tipoAssinatura.getValorDebitoAssinatura());
     }
 
-    private StatusAssinaturaEnum getStatusAssinatura(List<Assinatura> pagamentoAssinatura){
+    public StatusAssinaturaEnum getStatusAssinatura(List<Assinatura> pagamentoAssinatura){
         return getValorTotalMensalidade().compareTo(getValorTotalDebitado(pagamentoAssinatura)) == 0 ? StatusAssinaturaEnum.ATIVO : StatusAssinaturaEnum.PENDENTE;
+    }
+
+    public void validarExecucaoPagamentoProduto(List<Assinatura> pagamentoAssinatura){
+        if (getStatusAssinatura(pagamentoAssinatura) == StatusAssinaturaEnum.PENDENTE){
+            throw new IllegalArgumentException("Náo é Possível realizar Compra de Produtos - Assinatura Pendente");
+        }
     }
 
 }

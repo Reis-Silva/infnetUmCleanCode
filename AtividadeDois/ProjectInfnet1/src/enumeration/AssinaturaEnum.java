@@ -19,7 +19,7 @@ public enum AssinaturaEnum {
 
     public static final Long VALOR_SEMESTRAL = 6L;
 
-    public static final Long VALOR_ANUAL = 6L;
+    public static final Long VALOR_ANUAL = 12L;
 
     public static final BigDecimal ASSINATURA_TRIMESTRAL = new BigDecimal("100.00");
 

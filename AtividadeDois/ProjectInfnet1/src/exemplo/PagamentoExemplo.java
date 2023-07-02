@@ -8,7 +8,6 @@ import module.Produto;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.List;
 
 public class PagamentoExemplo {
 
@@ -20,7 +19,7 @@ public class PagamentoExemplo {
         ProdutoExemplo produtoExemplo = new ProdutoExemplo();
         ArrayList<Produto> produto = produtoExemplo.getProdutoExemplo();
 
-        AsssinaturaExemplo asssinaturaExemplo = new AsssinaturaExemplo();
+        AssinaturaExemplo asssinaturaExemplo = new AssinaturaExemplo();
         ArrayList<Assinatura> assinatura = asssinaturaExemplo.getAssinaturaExemplo();
 
         ArrayList<Pagamento> pagamento= new ArrayList<>();
@@ -30,4 +29,5 @@ public class PagamentoExemplo {
 
         return pagamento;
     }
+
 }
