@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-public class Pagamento {
+public class Pagamento extends Assinatura{
 
     private List<Produto> produtos;
 
@@ -12,7 +12,8 @@ public class Pagamento {
 
     private Cliente cliente;
 
-    public Pagamento(List<Produto> produtos, LocalDateTime dataCompra, Cliente cliente) {
+    public Pagamento(List<Produto> produtos, LocalDateTime dataCompra, Cliente cliente, Assinatura assinatura) {
+        super(assinatura.getBegin(), assinatura.getTipoAssinatura(), assinatura.getAtiva());
         this.produtos = produtos;
         this.dataCompra = dataCompra;
         this.cliente = cliente;

@@ -12,6 +12,9 @@ public class Produto {
 
     private Path file;
 
+    public Produto(){
+    }
+
     public Produto(String nome, BigDecimal preco) {
         this.nome = nome;
         this.Preco = preco;

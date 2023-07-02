@@ -6,8 +6,14 @@ public class Cliente {
 
     private String Nome;
 
-    public Cliente(String nome) {
+    private String identidadeFiscal;
+
+    public Cliente(){
+    }
+
+    public Cliente(String nome, String identidadeFiscal) {
         this.Nome = nome;
+        this.identidadeFiscal = identidadeFiscal;
     }
 
     public String getNome() {
@@ -16,6 +22,14 @@ public class Cliente {
 
     public void setNome(String nome) {
         Nome = nome;
+    }
+
+    public String getIdentidadeFiscal() {
+        return identidadeFiscal;
+    }
+
+    public void setIdentidadeFiscal(String identidadeFiscal) {
+        this.identidadeFiscal = identidadeFiscal;
     }
 
     @Override
