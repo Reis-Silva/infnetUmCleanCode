@@ -3,7 +3,12 @@
 - Professor: Leonardo Glória
 - Acadêmico: Júlio César Reis da Silva
 
-# Atividade 2
+# Projeto Final
+
+Implementar de forma simples 2 Patterns criacionais, 1 Pattern estrutural e 1 Pattern comportamental.
+OBS: Devido por 1 padrão apenas nas aulas.
+
+Complemento da atividade 2:
 
 Seguindo os padrões de Cleancode e solid.
 Refatore o seu código para deixá-lo orientado a objetos.
